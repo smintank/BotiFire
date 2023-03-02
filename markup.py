@@ -3,7 +3,7 @@ from aiogram.types import ReplyKeyboardMarkup, ReplyKeyboardRemove, KeyboardButt
 
 btn_main_menu = KeyboardButton('⬅️ Главное меню')
 
-btn_notify = KeyboardButton('📩 Оповестить')
+btn_notify = KeyboardButton('📩 Оповестить на завтра')
 btn_replace = KeyboardButton('🔁 Замена')
 
 main_menu = ReplyKeyboardMarkup().add(btn_replace, btn_notify)
