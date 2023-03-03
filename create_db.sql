@@ -1,5 +1,5 @@
 CREATE TABLE person(
-    tg_id VARCHAR(30) NOT NULL PRIMARY KEY,
+    id VARCHAR(30) NOT NULL PRIMARY KEY,
     nickname VARCHAR(50),
     first_name VARCHAR(20) NOT NULL,
     last_name VARCHAR(30) NOT NULL,
@@ -13,7 +13,7 @@ CREATE TABLE person(
 CREATE TABLE post(
     id INTEGER NOT NULL PRIMARY KEY,
     name VARCHAR(20) NOT NULL,
-    twenty_four_hour BOOLEAN,
+    is_24h BOOLEAN,
     work_hours_amount INTEGER
 );
 
@@ -27,21 +27,22 @@ CREATE TABLE workday(
 );
 
 CREATE TABLE day_post_user(
+    id INTEGER NOT NULL,
     workday_id INTEGER NOT NULL,
     post_id INTEGER NOT NULL,
     person_id INTEGER NOT NULL,
-    PRIMARY KEY(workday_id, post_id, person_id),
+    PRIMARY KEY(id, workday_id, post_id, person_id),
     FOREIGN KEY(workday_id) REFERENCES workday(id),
     FOREIGN KEY(post_id) REFERENCES post(id),
-    FOREIGN KEY(person_id) REFERENCES person(tg_id),
+    FOREIGN KEY(person_id) REFERENCES person(id)
 );
 
-INSERT INTO person(tg_id, first_name, last_name, mid_name, gender, birthday, age, is_admin boolean)
+INSERT INTO person (id, first_name, last_name, mid_name, gender, birthday, age, is_admin)
 VALUES
     ('220697264', 'Денис', 'Смагин', 'Александрович', 'М', '1988-07-23', 34, TRUE);
 
 
-INSERT INTO post(name, twenty_four_hour)
+INSERT INTO post (name, is_24h)
 VALUES
     ('1/1', TRUE),
     ('1/2', TRUE),
