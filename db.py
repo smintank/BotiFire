@@ -50,7 +50,8 @@ def _init_db():
 
 
 def check_db_exists():
-    cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='shifts' ")
+    cursor.execute("SELECT name FROM sqlite_master "
+                   "WHERE type='table' AND name='person'")
     table_exists = cursor.fetchall()
     if table_exists:
         return

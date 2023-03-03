@@ -1,7 +1,6 @@
 import logging
 import os
 from aiogram import Bot, Dispatcher, executor, types
-import asyncio
 
 from middlewares import AccessMiddleware
 from constants import START_MESSAGE, HELP_MESSAGE
@@ -11,6 +10,7 @@ logging.basicConfig(level=logging.INFO)
 
 bot = Bot(token=os.getenv("TG_API"))
 dp = Dispatcher(bot)
+dp.middleware.setup(AccessMiddleware())
 
 
 @dp.message_handler(commands=['start'])
