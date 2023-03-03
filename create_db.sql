@@ -54,4 +54,3 @@ VALUES
     ('Дежурный', TRUE),
     ('2', FALSE),
     ('3', FALSE);
-

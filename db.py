@@ -1,8 +1,8 @@
 import os
-from typing import Dict, List, Tuple
+from typing import Dict, List
 import sqlite3
 
-conn = sqlite3.connect(os.path.join('db', 'swifts.db'))
+conn = sqlite3.connect(os.path.join('db', 'shifts.db'))
 cursor = conn.cursor()
 
 
@@ -18,7 +18,7 @@ def insert(table: str, column_values: Dict):
     conn.commit()
 
 
-def fetchall(table: str, columns: List[str]) -> List[Tuple]:
+def fetchall(table: str, columns: List[str]):
     columns_joined = ", ".join(columns)
     cursor.execute(f"SELECT {columns_joined} FROM {table}")
     rows = cursor.fetchall()
@@ -29,7 +29,6 @@ def fetchall(table: str, columns: List[str]) -> List[Tuple]:
             dict_row[column] = row[index]
         result.append(dict_row)
     return result
-
 
 
 def delete(table: str, row_id: int) -> None:
@@ -43,7 +42,7 @@ def get_cursor():
 
 
 def _init_db():
-    "Инициализация БД"
+    """Инициализация БД"""
     with open('create_db.sql', 'r') as f:
         sql = f.read()
     cursor.executescript(sql)
@@ -51,7 +50,7 @@ def _init_db():
 
 
 def check_db_exists():
-    cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='swifts' ")
+    cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='shifts' ")
     table_exists = cursor.fetchall()
     if table_exists:
         return
