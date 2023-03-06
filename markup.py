@@ -13,11 +13,13 @@ main_menu = ReplyKeyboardMarkup(resize_keyboard=True).add(btn_shift_notify, btn_
 inline_shift_notify = InlineKeyboardButton('📩 Оповестить смену', callback_data='shift_notify')
 inline_notify = InlineKeyboardButton('📥 Оповестить ...', callback_data='notify')
 inline_replace = InlineKeyboardButton('🔁 Замена', callback_data='replace_person')
+inline_status = InlineKeyboardButton('ℹ️ Статус', callback_data='notify_status')
 
 
 main_inline_menu = InlineKeyboardMarkup()
 main_inline_menu.row(inline_shift_notify)
 main_inline_menu.row(inline_notify)
 main_inline_menu.row(inline_replace)
+main_inline_menu.row(inline_status)
 
 remove_menu = ReplyKeyboardRemove()

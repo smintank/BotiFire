@@ -32,8 +32,8 @@ async def send_welcome(message: types.Message):
 
 @dp.message_handler()
 async def echo(message: types.Message):
-    await message.answer(message.text)
-    shifts.new_shift.add_shift(message.text, message.from_user.id)
+    answer = shifts.new_shift.add_shift(message.text, message.from_user.id)
+    await message.answer(answer)
 
 
 @dp.callback_query_handler(text="shift_notify")
@@ -41,7 +41,7 @@ async def process_callback_notify(callback_query: types.CallbackQuery):
     await bot.answer_callback_query(callback_query.id)
     creator = callback_query.from_user.id
     await bot.send_message(callback_query.from_user.id,
-                           'Ведите фамилию и пост в формате:\n <Пост> <Фамилия>',
+                           'Ведите фамилию сотрудника:',
                            reply_markup=menu.remove_menu)
     shifts.new_shift.creator = creator
     shifts.new_shift.date = date.today().strftime("%d-%m-%Y")

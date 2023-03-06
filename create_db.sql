@@ -41,7 +41,7 @@ CREATE TABLE day_post_user(
 
 INSERT INTO person (id, first_name, last_name, mid_name, gender, birthday, age, is_admin)
 VALUES
-    ('220697264', 'Денис', 'Смагин', 'Александрович', 'М', '1988-07-23', 34, TRUE);
+    ('220697264', 'денис', 'смагин', 'александрович', 'м', '1988-07-23', 34, TRUE);
 
 
 INSERT INTO post (name, is_24h)
