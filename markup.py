@@ -1,5 +1,5 @@
 from aiogram.types import ReplyKeyboardMarkup, ReplyKeyboardRemove, KeyboardButton, \
-    InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
+    InlineKeyboardMarkup, InlineKeyboardButton
 
 btn_main_menu = KeyboardButton('⬅️ Главное меню')
 
@@ -19,3 +19,5 @@ main_inline_menu = InlineKeyboardMarkup()
 main_inline_menu.row(inline_shift_notify)
 main_inline_menu.row(inline_notify)
 main_inline_menu.row(inline_replace)
+
+remove_menu = ReplyKeyboardRemove()

@@ -27,10 +27,12 @@ CREATE TABLE workday(
 );
 
 CREATE TABLE day_post_user(
-    id INTEGER NOT NULL,
+    id INTEGER AUTOINCREMENT,
     workday_id INTEGER NOT NULL,
     post_id INTEGER NOT NULL,
     person_id INTEGER NOT NULL,
+    creator_id VARCHAR(30) NOT NULL,
+    is_notified BOOLEAN DEFAULT FALSE,
     PRIMARY KEY(id, workday_id, post_id, person_id),
     FOREIGN KEY(workday_id) REFERENCES workday(id),
     FOREIGN KEY(post_id) REFERENCES post(id),

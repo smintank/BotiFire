@@ -1,9 +1,10 @@
+from datetime import date
 import logging
 import os
 from aiogram import Bot, Dispatcher, executor, types
 
 from middlewares import AccessMiddleware
-from constants import START_MESSAGE, HELP_MESSAGE
+from defaults import START_MESSAGE, HELP_MESSAGE
 import markup as menu
 import shifts
 
@@ -32,13 +33,18 @@ async def send_welcome(message: types.Message):
 @dp.message_handler()
 async def echo(message: types.Message):
     await message.answer(message.text)
+    shifts.new_shift.add_shift(message.text, message.from_user.id)
 
 
 @dp.callback_query_handler(text="shift_notify")
 async def process_callback_notify(callback_query: types.CallbackQuery):
     await bot.answer_callback_query(callback_query.id)
-    await bot.send_message(callback_query.from_user.id, 'Ведите фамилию и пост')
-    await bot.send_message(callback_query.from_user.id, str(shifts.create_shift()))
+    creator = callback_query.from_user.id
+    await bot.send_message(callback_query.from_user.id,
+                           'Ведите фамилию и пост в формате:\n <Пост> <Фамилия>',
+                           reply_markup=menu.remove_menu)
+    shifts.new_shift.creator = creator
+    shifts.new_shift.date = date.today().strftime("%d-%m-%Y")
 
 
 if __name__ == '__main__':
