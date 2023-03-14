@@ -27,13 +27,12 @@ CREATE TABLE workday(
 );
 
 CREATE TABLE day_post_user(
-    id INTEGER AUTOINCREMENT,
     workday_id INTEGER NOT NULL,
     post_id INTEGER NOT NULL,
     person_id INTEGER NOT NULL,
     creator_id VARCHAR(30) NOT NULL,
     is_notified BOOLEAN DEFAULT FALSE,
-    PRIMARY KEY(id, workday_id, post_id, person_id),
+    PRIMARY KEY(workday_id, post_id, person_id),
     FOREIGN KEY(workday_id) REFERENCES workday(id),
     FOREIGN KEY(post_id) REFERENCES post(id),
     FOREIGN KEY(person_id) REFERENCES person(id)
@@ -41,8 +40,8 @@ CREATE TABLE day_post_user(
 
 INSERT INTO person (id, first_name, last_name, mid_name, gender, birthday, age, is_admin)
 VALUES
-    ('220697264', 'денис', 'смагин', 'александрович', 'м', '1988-07-23', 34, TRUE);
-
+    ('220697264', 'денис', 'смагин', 'александрович', 'м', '1988-07-23', 34, TRUE),
+    ('501372585', 'антон', 'смагин', 'витальевич', 'м', '1990-03-13', 33, FALSE);
 
 INSERT INTO post (name, is_24h)
 VALUES

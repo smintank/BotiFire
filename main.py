@@ -1,4 +1,3 @@
-from datetime import date
 import logging
 import os
 from aiogram import Bot, Dispatcher, executor, types
@@ -26,25 +25,42 @@ async def send_welcome(message: types.Message):
 
 
 @dp.message_handler(commands=['menu'])
-async def send_welcome(message: types.Message):
+async def send_menu(message: types.Message):
     await message.answer("Что вы хотите сделать?", reply_markup=menu.main_inline_menu)
 
 
 @dp.message_handler()
-async def echo(message: types.Message):
-    answer = shifts.new_shift.add_shift(message.text, message.from_user.id)
-    await message.answer(answer)
+async def send_text(message: types.Message):
+    shifts.new_shift.add_shift(message.text, message.from_user.id)
+    await message.answer('Выберете пост:', reply_markup=menu.post_markup())
 
 
 @dp.callback_query_handler(text="shift_notify")
 async def process_callback_notify(callback_query: types.CallbackQuery):
     await bot.answer_callback_query(callback_query.id)
-    creator = callback_query.from_user.id
-    await bot.send_message(callback_query.from_user.id,
-                           'Ведите фамилию сотрудника:',
-                           reply_markup=menu.remove_menu)
-    shifts.new_shift.creator = creator
-    shifts.new_shift.date = date.today().strftime("%d-%m-%Y")
+    await bot.send_message(callback_query.from_user.id, 'Ведите фамилию сотрудника:', reply_markup=menu.remove_menu)
+
+
+@dp.callback_query_handler(func=lambda c: c.data and c.data.startswith('post_'))
+async def process_callback_notify(callback_query: types.CallbackQuery):
+    post = callback_query.data[4:]
+    await bot.answer_callback_query(callback_query.id)
+    await bot.send_message(callback_query.from_user.id, f'Нажата кнопка "{post}"', reply_markup=menu.remove_menu)
+    # await bot.send_message(callback_query.from_user.id,
+    #                           'Ведите фамилию следующего сотрудника:', reply_markup=menu.remove_menu)
+
+
+@dp.callback_query_handler(text="ok_btn")
+async def process_callback_notify(callback_query: types.CallbackQuery):
+    await bot.answer_callback_query(callback_query.id)
+    shifts.shift.agreed = callback_query.id
+    await bot.send_message(callback_query.from_user.id, '✅🪖🔫', reply_markup=menu.remove_menu)
+
+
+@dp.callback_query_handler(text="deny_btn")
+async def process_callback_notify(callback_query: types.CallbackQuery):
+    await bot.answer_callback_query(callback_query.id)
+    await bot.send_message(callback_query.from_user.id, 'Укажите причину:', reply_markup=menu.remove_menu)
 
 
 if __name__ == '__main__':
