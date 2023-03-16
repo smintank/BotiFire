@@ -39,21 +39,3 @@ CREATE TABLE day_post_user(
     FOREIGN KEY(post_id) REFERENCES post(id),
     FOREIGN KEY(person_id) REFERENCES person(id)
 );
-
-INSERT INTO person (id, first_name, last_name, mid_name, gender, birthday, age, is_admin)
-VALUES
-    ('220697264', 'денис', 'смагин', 'александрович', 'м', '1988-07-23', 34, TRUE),
-    ('501372585', 'антон', 'смагин', 'витальевич', 'м', '1990-03-13', 33, FALSE);
-
-INSERT INTO post (name, alias, is_main, is_24h)
-VALUES
-    ('1/1', '1 пост 1 смена', TRUE, TRUE),
-    ('1/2', '1 пост 2 смена', TRUE, TRUE),
-    ('ГБР1', 'Гбр 1', TRUE, TRUE),
-    ('ГБР2', 'Гбр 2', TRUE, TRUE),
-    ('7/1', '7 пост 1 смена',  TRUE, TRUE),
-    ('7/2', '7 пост 2 смена', TRUE, TRUE),
-    ('Яст', 'Ястреб', TRUE, FALSE),
-    ('Деж', 'Дежурный', TRUE, TRUE),
-    ('2', '2 пост', FALSE, FALSE),
-    ('3', '3 пост', FALSE, FALSE);
