@@ -2,10 +2,10 @@ import datetime as dt
 from typing import NamedTuple
 import re
 
-import defaults
+import settings
 import exceptions
 import db
-import main
+from main import bot
 import markup as menu
 
 
@@ -31,11 +31,11 @@ class Shift:
         self.today_date = dt.datetime.today()
         self.shifts_date = dt.date.today() + dt.timedelta(days=1)
         self.creator_tg_id = creator_tg_id
-        parsed_person = parse_message(message)              # Парсинг сообщения на поиск фамилии
-        shift_item = self._validate_data(parsed_person)     # Проверка существует ли такой пользователь в БД
+        parsed_person = parse_message(message)  # Парсинг сообщения на поиск фамилии
+        shift_item = self._validate_data(parsed_person)  # Проверка существует ли такой пользователь в БД
         self.person_tg_id = shift_item[0]
         self.notify(self.person_tg_id, self.post_name)
-        self.notified.append(shift_item)                    # Добавление в отслеживание статуса оповещения
+        self.notified.append(shift_item)  # Добавление в отслеживание статуса оповещения
 
     def set_post(self, post_id: int):
         self.post_id = post_id
@@ -45,7 +45,7 @@ class Shift:
         cursor.execute(f"SELECT id, last_name, first_name, mid_name FROM person WHERE last_name='{parsed_person[0]}' ")
         db_results = cursor.fetchall()
         if db_results is None or not db_results:
-            raise exceptions.NotCorrectMessage(defaults.NAME_CHECK_ERROR_MESSAGE)
+            raise exceptions.NotCorrectMessage(settings.MESSAGE['name_err'])
 
         name = ' '.join(parsed_person)
         count = len(parsed_person)
@@ -60,18 +60,18 @@ class Shift:
         if match and len(match) == 1:
             return match[0]
         else:
-            raise exceptions.NotCorrectMessage(defaults.SURNAME_CHECK_ERROR_MESSAGE)
+            raise exceptions.NotCorrectMessage(settings.MESSAGE['surname_err'])
 
     def notify(self, person_tg_id: int, post_name: str):
-        main.bot.send_message(str(person_tg_id),
-                              text=f'Ты заступаешь завтра: {post_name}', reply_markup=menu.agree_inline_menu)
+        bot.send_message(str(person_tg_id),
+                         text=f'Ты заступаешь завтра: {post_name}', reply_markup=menu.agree_inline_menu)
 
 
 def parse_message(text: str) -> [str]:
     text = to_ru_letters(text.lower())
     parsed_text = re.search(r'(\b[а-яё]{2,20}\b ?[а-я]?\.? ?[а-я]?\.?)', text)
     if parsed_text is None or not parsed_text.group(0):
-        raise exceptions.NotCorrectMessage(defaults.NAME_CHECK_ERROR_MESSAGE)
+        raise exceptions.NotCorrectMessage(settings.MESSAGE['name_err'])
     person_name = parsed_text.group(0).lower().replace('ё', 'е')
     return person_name.replace('.', ' ').split()
 
@@ -90,7 +90,5 @@ def to_ru_letters(word: str) -> str:
 
 new_shift = Shift()
 
-
 if __name__ == '__main__':
-    shift = Shift()
-    shift.add_shift('Смaгин Д.A.', '220697264')
+    new_shift.add_shift('Смaгин Д.A.', '220697264')
