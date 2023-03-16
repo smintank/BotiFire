@@ -41,9 +41,9 @@ async def process_callback_notify(callback_query: types.CallbackQuery):
     await bot.send_message(callback_query.from_user.id, 'Ведите фамилию сотрудника:', reply_markup=menu.remove_menu)
 
 
-@dp.callback_query_handler(func=lambda c: c.data and c.data.startswith('post_'))
-async def process_callback_notify(callback_query: types.CallbackQuery):
-    post = callback_query.data[4:]
+@dp.callback_query_handler(lambda c: c.data and c.data.startswith('post_'))
+async def process_callback_posts(callback_query: types.CallbackQuery):
+    post = callback_query.data[5:]
     await bot.answer_callback_query(callback_query.id)
     await bot.send_message(callback_query.from_user.id, f'Нажата кнопка "{post}"', reply_markup=menu.remove_menu)
     # await bot.send_message(callback_query.from_user.id,
@@ -51,14 +51,14 @@ async def process_callback_notify(callback_query: types.CallbackQuery):
 
 
 @dp.callback_query_handler(text="ok_btn")
-async def process_callback_notify(callback_query: types.CallbackQuery):
+async def process_callback_ok(callback_query: types.CallbackQuery):
     await bot.answer_callback_query(callback_query.id)
-    shifts.shift.agreed = callback_query.id
+    shifts.new_shift.agreed = callback_query.id
     await bot.send_message(callback_query.from_user.id, '✅🪖🔫', reply_markup=menu.remove_menu)
 
 
 @dp.callback_query_handler(text="deny_btn")
-async def process_callback_notify(callback_query: types.CallbackQuery):
+async def process_callback_deny(callback_query: types.CallbackQuery):
     await bot.answer_callback_query(callback_query.id)
     await bot.send_message(callback_query.from_user.id, 'Укажите причину:', reply_markup=menu.remove_menu)
 
