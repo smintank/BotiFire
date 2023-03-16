@@ -46,6 +46,7 @@ def _init_db():
         sql = f.read()
     cursor.executescript(sql)
     conn.commit()
+    fill_table()
 
 
 def check_db_exists():
@@ -55,6 +56,13 @@ def check_db_exists():
     if table_exists:
         return
     _init_db()
+
+
+def fill_table():
+    with open('fill_db.sql', 'r') as f:
+        sql = f.read()
+    cursor.executescript(sql)
+    conn.commit()
 
 
 def _del_db():
@@ -67,6 +75,7 @@ def _del_db():
 if settings.DEL_DB:
     "Удаление текущей БД"
     _del_db()
+
 
 conn = sqlite3.connect(os.path.join(f'{settings.DB_PATH}', f'{settings.DB_NAME}'))
 cursor = conn.cursor()
