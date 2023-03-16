@@ -31,12 +31,11 @@ class Shift:
         self.today_date = dt.datetime.today()
         self.shifts_date = dt.date.today() + dt.timedelta(days=1)
         self.creator_tg_id = creator_tg_id
-        parsed_person = parse_message(message)  # Парсинг сообщения на поиск фамилии
-        shift_item = self._validate_data(parsed_person)  # Проверка существует ли такой пользователь в БД
+        parsed_person = parse_message(message)              # Парсинг сообщения на поиск фамилии
+        shift_item = self._validate_data(parsed_person)     # Проверка существует ли такой пользователь в БД
         self.person_tg_id = shift_item[0]
         self.notify(self.person_tg_id, self.post_name)
-        self.notified.append(shift_item)  # Добавление в отслеживание статуса оповещения
-
+        self.notified.append(shift_item)                    # Добавление в отслеживание статуса оповещения
 
     def set_post(self, post_id: int):
         self.post_id = post_id
