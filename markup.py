@@ -28,10 +28,11 @@ main_inline_menu.row(inline_status)
 def post_markup():
     post_inline_menu = InlineKeyboardMarkup()
     cursor = db.get_cursor()
-    cursor.execute("SELECT id, name FROM post")
+    cursor.execute("SELECT alias, name FROM post WHERE is_main=TRUE")
     result = cursor.fetchall()
-    for post_id, post_name in result:
-        post_inline_menu.row(InlineKeyboardButton(f'{post_name}', callback_data=f'post_{post_id}'))
+    for post_alias, post_name in result:
+        post_inline_menu.row(InlineKeyboardButton(f'{post_alias}', callback_data=f'post_{post_name}'))
+    post_inline_menu.row(InlineKeyboardButton(f'...', callback_data='post_ets'))
     return post_inline_menu
 
 
