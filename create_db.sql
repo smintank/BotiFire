@@ -13,6 +13,8 @@ CREATE TABLE person(
 CREATE TABLE post(
     id INTEGER NOT NULL PRIMARY KEY,
     name VARCHAR(20) NOT NULL,
+    alias VARCHAR(50),
+    is_main BOOLEAN NOT NULL,
     is_24h BOOLEAN,
     work_hours_amount INTEGER
 );
@@ -43,15 +45,15 @@ VALUES
     ('220697264', 'денис', 'смагин', 'александрович', 'м', '1988-07-23', 34, TRUE),
     ('501372585', 'антон', 'смагин', 'витальевич', 'м', '1990-03-13', 33, FALSE);
 
-INSERT INTO post (name, is_24h)
+INSERT INTO post (name, alias, is_main, is_24h)
 VALUES
-    ('1/1', TRUE),
-    ('1/2', TRUE),
-    ('7/1', TRUE),
-    ('7/1', TRUE),
-    ('ГБР1', TRUE),
-    ('ГБР2', TRUE),
-    ('Ястреб', FALSE),
-    ('Дежурный', TRUE),
-    ('2', FALSE),
-    ('3', FALSE);
+    ('1/1', '1 пост 1 смена', TRUE, TRUE),
+    ('1/2', '1 пост 2 смена', TRUE, TRUE),
+    ('ГБР1', 'Гбр 1', TRUE, TRUE),
+    ('ГБР2', 'Гбр 2', TRUE, TRUE),
+    ('7/1', '7 пост 1 смена',  TRUE, TRUE),
+    ('7/2', '7 пост 2 смена', TRUE, TRUE),
+    ('Яст', 'Ястреб', TRUE, FALSE),
+    ('Деж', 'Дежурный', TRUE, TRUE),
+    ('2', '2 пост', FALSE, FALSE),
+    ('3', '3 пост', FALSE, FALSE);
