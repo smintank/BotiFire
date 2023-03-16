@@ -2,8 +2,7 @@ import os
 from typing import Dict, List
 import sqlite3
 
-conn = sqlite3.connect(os.path.join('db', 'shifts.db'))
-cursor = conn.cursor()
+import settings
 
 
 def insert(table: str, column_values: Dict):
@@ -58,4 +57,17 @@ def check_db_exists():
     _init_db()
 
 
+def _del_db():
+    try:
+        os.remove(os.path.join(f'{settings.DB_PATH}', f'{settings.DB_NAME}'))
+    except FileExistsError:
+        pass
+
+
+if settings.DEL_DB:
+    "Удаление текущей БД"
+    _del_db()
+
+conn = sqlite3.connect(os.path.join(f'{settings.DB_PATH}', f'{settings.DB_NAME}'))
+cursor = conn.cursor()
 check_db_exists()
