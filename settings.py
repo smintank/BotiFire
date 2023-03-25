@@ -1,12 +1,12 @@
 import defaults as df
 
-DB_NAME = 'shifts.db'
-DB_PATH = 'db'
+DB_NAME: str = 'shifts.db'
+DB_PATH: str = 'db'
 
 
-DEL_DB = True
+DELETE_DB: bool = True
 
-MESSAGE = {
+message: dict[str, str] = {
     'start': df.START_MESSAGE,
     'help': df.HELP_MESSAGE,
     'name_err': df.NAME_CHECK_ERROR_MESSAGE,

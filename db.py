@@ -1,11 +1,11 @@
 import os
-from typing import Dict, List
+from typing import Dict, List, Any
 import sqlite3
 
 import settings
 
 
-def insert(table: str, column_values: Dict):
+def insert(table: str, column_values: Dict):  # TODO: Rewrite this func
     columns = ', '.join(column_values.keys())
     values = [tuple(column_values.values())]
     placeholders = ", ".join("?" * len(column_values.keys()))
@@ -17,7 +17,8 @@ def insert(table: str, column_values: Dict):
     conn.commit()
 
 
-def fetchall(table: str, columns: List[str]):
+def fetchall(table: str, columns: List[str]) -> list[dict[str, Any]]:
+    """Return columns from the table"""
     columns_joined = ", ".join(columns)
     cursor.execute(f"SELECT {columns_joined} FROM {table}")
     rows = cursor.fetchall()
@@ -31,25 +32,28 @@ def fetchall(table: str, columns: List[str]):
 
 
 def delete(table: str, row_id: int) -> None:
-    row_id = int(row_id)
+    """Delete row from table of DB"""
+    row_id: int = int(row_id)
     cursor.execute(f"DELETE FROM {table} WHERE id={row_id}")
     conn.commit()
 
 
 def get_cursor():
+    """Return DB cursor"""
     return cursor
 
 
-def _init_db():
-    """Инициализация БД"""
+def _init_db() -> None:
+    """Initialize DB"""
     with open('create_db.sql', 'r') as f:
-        sql = f.read()
+        sql: str = f.read()
     cursor.executescript(sql)
     conn.commit()
     fill_table()
 
 
-def check_db_exists():
+def check_db_exists() -> None:
+    """Create DB if DB is not exist"""
     cursor.execute("SELECT name FROM sqlite_master "
                    "WHERE type='table' AND name='person'")
     table_exists = cursor.fetchall()
@@ -58,22 +62,23 @@ def check_db_exists():
     _init_db()
 
 
-def fill_table():
+def fill_table() -> None:
+    """Fill DB with start data"""
     with open('fill_db.sql', 'r') as f:
-        sql = f.read()
+        sql: str = f.read()
     cursor.executescript(sql)
     conn.commit()
 
 
 def _del_db():
+    """Delete current DB"""
     try:
         os.remove(os.path.join(f'{settings.DB_PATH}', f'{settings.DB_NAME}'))
     except FileExistsError:
         pass
 
 
-if settings.DEL_DB:
-    "Удаление текущей БД"
+if settings.DELETE_DB:
     _del_db()
 
 
