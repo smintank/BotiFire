@@ -5,7 +5,7 @@ import re
 import sender
 import settings
 import exceptions
-import db
+from database import database as db
 
 
 class NewShifts(NamedTuple):

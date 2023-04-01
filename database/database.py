@@ -45,7 +45,7 @@ def get_cursor():
 
 def _init_db() -> None:
     """Initialize DB"""
-    with open('create_db.sql', 'r') as f:
+    with open('database/create_db.sql', 'r') as f:
         sql: str = f.read()
     cursor.executescript(sql)
     conn.commit()
@@ -64,7 +64,7 @@ def check_db_exists() -> None:
 
 def fill_table() -> None:
     """Fill DB with start data"""
-    with open('fill_db.sql', 'r') as f:
+    with open('database/fill_db.sql', 'r') as f:
         sql: str = f.read()
     cursor.executescript(sql)
     conn.commit()

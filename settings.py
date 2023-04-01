@@ -1,7 +1,7 @@
 import lexicon.lexicon_ru as lexicon
 
 DB_NAME: str = 'shifts.db'
-DB_PATH: str = 'db'
+DB_PATH: str = 'database/db'
 
 
 DELETE_DB: bool = True
