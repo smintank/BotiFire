@@ -1,4 +1,4 @@
-from main import bot
+from bot import bot
 
 
 def send_message(tg_id: str, text: str, keyboard=None) -> None:

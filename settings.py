@@ -1,4 +1,4 @@
-import defaults as df
+import lexicon.lexicon_ru as lexicon
 
 DB_NAME: str = 'shifts.db'
 DB_PATH: str = 'db'
@@ -7,8 +7,8 @@ DB_PATH: str = 'db'
 DELETE_DB: bool = True
 
 message: dict[str, str] = {
-    'start': df.START_MESSAGE,
-    'help': df.HELP_MESSAGE,
-    'name_err': df.NAME_CHECK_ERROR_MESSAGE,
-    'surname_err': df.SURNAME_CHECK_ERROR_MESSAGE
+    'start': lexicon.START_MESSAGE,
+    'help': lexicon.HELP_MESSAGE,
+    'name_err': lexicon.NAME_CHECK_ERROR_MESSAGE,
+    'surname_err': lexicon.SURNAME_CHECK_ERROR_MESSAGE
 }

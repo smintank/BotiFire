@@ -3,7 +3,7 @@ import os
 from aiogram import Bot, Dispatcher, executor, types
 
 from middlewares import AccessMiddleware
-from defaults import START_MESSAGE, HELP_MESSAGE
+from lexicon.lexicon_ru import START_MESSAGE, HELP_MESSAGE
 import markup as menu
 import shifts
 
