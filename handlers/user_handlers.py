@@ -4,7 +4,7 @@ from aiogram.types import Message, CallbackQuery
 
 import lexicon.lexicon_ru
 from keyboards import menu_keyboards
-import shifts
+import model.models as shifts
 
 router: Router = Router()
 

@@ -1,7 +1,7 @@
 from aiogram import Router
 from aiogram.types import Message
 
-import shifts
+import model.models as shifts
 from keyboards.keyboard_utils import posts_inline_keyboard
 
 router: Router = Router()
