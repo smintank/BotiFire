@@ -6,7 +6,6 @@ import sender
 import settings
 import exceptions
 import db
-import markup
 
 
 class NewShifts(NamedTuple):
@@ -73,8 +72,7 @@ def validate_data(parsed_person: [str]) -> [str]:
 def notify(person_tg_id: int, post_name: str):
     """Create answer message for telegram dispatcher"""
     sender.send_message(tg_id=str(person_tg_id),
-                        text=f'Ты заступаешь завтра: {post_name}',
-                        keyboard=markup.agree_inline_menu)
+                        text=f'Ты заступаешь завтра: {post_name}')
 
 
 def parse_message(text: str) -> [str]:
