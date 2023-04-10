@@ -2,7 +2,7 @@ import os
 from typing import Dict, List, Any
 import sqlite3
 
-from config_data.config import DataBase
+from config_data.config import DB_NAME, DB_PATH, REWRITE_DB
 
 
 def insert(table: str, column_values: Dict):  # TODO: Rewrite this func
@@ -73,15 +73,15 @@ def fill_table() -> None:
 def _del_db():
     """Delete current DB"""
     try:
-        os.remove(os.path.join(f'{DataBase.PATH}', f'{DataBase.NAME}'))
+        os.remove(os.path.join(f'{DB_PATH}', f'{DB_NAME}'))
     except FileExistsError:
         pass
 
 
-if DataBase.REWRITE_DB:
+if REWRITE_DB:
     _del_db()
 
 
-conn = sqlite3.connect(os.path.join(f'{DataBase.PATH}', f'{DataBase.NAME}'))
+conn = sqlite3.connect(os.path.join(f'{DB_PATH}', f'{DB_NAME}'))
 cursor = conn.cursor()
 check_db_exists()

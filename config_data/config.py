@@ -1,7 +1,5 @@
-from typing import NamedTuple
 
+DB_NAME: str = 'shifts.db'
+DB_PATH: str = 'database/db'
+REWRITE_DB: bool = True
 
-class DataBase(NamedTuple):
-    NAME: str = 'shifts.db'
-    PATH: str = 'database/db'
-    REWRITE_DB: bool = True
