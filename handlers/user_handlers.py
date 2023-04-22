@@ -43,7 +43,7 @@ async def process_callback_posts(callback: CallbackQuery) -> None:
     print('Отработал хендлер с лябдой')
     post = callback.data
     print(post)
-    await callback.message.edit_text(text=menu_buttons.CHOSE_POST,
+    await callback.message.edit_text(text=menu_buttons.CHOSE_EMPLOYEE,
                                      reply_markup=posts_employee_process(post))
 
 

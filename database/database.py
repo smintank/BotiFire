@@ -1,5 +1,5 @@
 import os
-from typing import Dict, List, Any
+from typing import Dict, List, Any, Optional
 import sqlite3
 
 from config_data.config import DB_NAME, DB_PATH, REWRITE_DB
@@ -17,10 +17,19 @@ def insert(table: str, column_values: Dict):  # TODO: Rewrite this func
     conn.commit()
 
 
-def fetchall(table: str, columns: List[str]) -> list[dict[str, Any]]:
+def fetchall(table: str,
+             columns: List[str],
+             filters: Optional[str] = None,
+             order_by: Optional[str] = None
+             ) -> list[dict[str, Any]]:
     """Return columns from the table"""
     columns_joined = ", ".join(columns)
-    cursor.execute(f"SELECT {columns_joined} FROM {table}")
+    query = f"SELECT {columns_joined} FROM {table}"
+    if filters:
+        query += f'WHERE {filters}'
+    if order_by:
+        query += f'ORDER BY {order_by}'
+    cursor.execute(query)
     rows = cursor.fetchall()
     result = []
     for row in rows:

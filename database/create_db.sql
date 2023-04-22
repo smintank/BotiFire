@@ -14,6 +14,7 @@ CREATE TABLE post(
     id INTEGER NOT NULL PRIMARY KEY,
     name VARCHAR(20) NOT NULL,
     alias VARCHAR(50),
+    ordering INTEGER NOT NULL,
     is_main BOOLEAN NOT NULL,
     is_24h BOOLEAN,
     work_hours_amount INTEGER
