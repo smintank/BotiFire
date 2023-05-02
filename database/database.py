@@ -1,34 +1,47 @@
 import os
-from typing import Dict, List, Any, Optional
+from typing import Any, Optional
 import sqlite3
 
 from config_data.config import DB_NAME, DB_PATH, REWRITE_DB
 
 
-def insert(table: str, column_values: Dict):  # TODO: Rewrite this func
-    columns = ', '.join(column_values.keys())
+def insert(table: str,
+           column_values: dict
+           ):
     values = [tuple(column_values.values())]
+    columns = ', '.join(column_values.keys())
     placeholders = ", ".join("?" * len(column_values.keys()))
     cursor.executemany(
-        f"INSERT INTO {table} "
-        f"({columns}) "
-        f"VALUES ({placeholders})",
+        f"INSERT INTO {table} ({columns}) VALUES ({placeholders})"
+        , values)
+    conn.commit()
+
+
+def update(table: str,
+           column_values: dict,
+           condition: str
+           ):
+    values = [tuple(column_values.values())]
+    query = " = ?, ".join(column_values.keys())
+    query += ' = ? '
+    cursor.executemany(
+        f"UPDATE {table} SET {query} WHERE {condition}",
         values)
     conn.commit()
 
 
 def fetchall(table: str,
-             columns: List[str],
+             columns: list[str],
              filters: Optional[str] = None,
              order_by: Optional[str] = None
              ) -> list[dict[str, Any]]:
     """Return columns from the table"""
     columns_joined = ", ".join(columns)
-    query = f"SELECT {columns_joined} FROM {table}"
+    query = f"SELECT {columns_joined} FROM {table} "
     if filters:
-        query += f'WHERE {filters}'
+        query += f'WHERE {filters} '
     if order_by:
-        query += f'ORDER BY {order_by}'
+        query += f'ORDER BY {order_by};'
     cursor.execute(query)
     rows = cursor.fetchall()
     result = []
@@ -64,7 +77,7 @@ def _init_db() -> None:
 def check_db_exists() -> None:
     """Create DB if DB is not exist"""
     cursor.execute("SELECT name FROM sqlite_master "
-                   "WHERE type='table' AND name='person'")
+                   "WHERE type='table' AND name='employee'")
     table_exists = cursor.fetchall()
     if table_exists:
         return
