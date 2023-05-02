@@ -1,4 +1,11 @@
-CREATE TABLE person(
+CREATE TABLE rank(
+    id INTEGER NOT NULL PRIMARY KEY,
+    name VARCHAR(30) NOT NULL,
+    short_name VARCHAR(30) NOT NULL,
+    is_officer BOOLEAN NOT NULL
+);
+
+CREATE TABLE employee(
     id VARCHAR(30) NOT NULL PRIMARY KEY,
     nickname VARCHAR(50),
     first_name VARCHAR(20) NOT NULL,
@@ -6,8 +13,10 @@ CREATE TABLE person(
     mid_name VARCHAR(20),
     gender VARCHAR(1) DEFAULT 'M',
     birthday DATE,
-    age INTEGER(2),
-    is_admin BOOLEAN DEFAULT FALSE
+    rank_id INTEGER NOT NULL,
+    is_sentry BOOLEAN NOT NULL,
+    is_admin BOOLEAN DEFAULT FALSE,
+    FOREIGN KEY(rank_id) REFERENCES rank(id)
 );
 
 CREATE TABLE post(
@@ -20,23 +29,14 @@ CREATE TABLE post(
     work_hours_amount INTEGER
 );
 
-CREATE TABLE workday(
-    id INTEGER NOT NULL PRIMARY KEY,
-    full_date DATE NOT NULL,
-    cur_year INTEGER(4) NOT NULL,
-    cur_month INTEGER(2) NOT NULL,
-    is_holiday BOOLEAN,
-    is_weekend BOOLEAN
-);
-
-CREATE TABLE day_post_user(
-    workday_id INTEGER NOT NULL,
+CREATE TABLE day_post_employee(
+    workday_date DATE NOT NULL,
     post_id INTEGER NOT NULL,
-    person_id INTEGER NOT NULL,
-    creator_id VARCHAR(30) NOT NULL,
+    employee_id INTEGER NOT NULL,
+    creator_id INTEGER NOT NULL,
     is_notified BOOLEAN DEFAULT FALSE,
-    PRIMARY KEY(workday_id, post_id, person_id),
-    FOREIGN KEY(workday_id) REFERENCES workday(id),
+    PRIMARY KEY(workday_date, post_id, employee_id),
     FOREIGN KEY(post_id) REFERENCES post(id),
-    FOREIGN KEY(person_id) REFERENCES person(id)
+    FOREIGN KEY(employee_id) REFERENCES employee(id),
+    FOREIGN KEY(creator_id) REFERENCES employee(id)
 );
