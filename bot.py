@@ -11,11 +11,12 @@ from handlers import command_handlers, other_handlers, fms_menu
 
 logging.basicConfig(level=logging.INFO)
 
+bot: Bot = Bot(token=os.getenv("TG_API"), parse_mode='HTML')
 
 async def main():
     logging.info('Starting bot')
 
-    bot: Bot = Bot(token=os.getenv("TG_API"), parse_mode='HTML')
+
     dp: Dispatcher = Dispatcher(storage=storage)
 
     dp.include_router(command_handlers.router)
