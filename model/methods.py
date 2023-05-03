@@ -2,7 +2,10 @@ from dataclasses import dataclass
 from typing import Optional
 import datetime as dt
 
+from bot import bot
 from database import database as db
+from keyboards.menu_keyboards import get_service_keyboard
+from lexicon import menu_buttons
 
 
 @dataclass
@@ -17,6 +20,7 @@ class Employee:
     tg_id: str
     name: str
     is_busy: Optional[bool] = False
+    status: str = '🟨'
 
 
 @dataclass()
@@ -39,9 +43,10 @@ def get_shift() -> dict[str: str]:
         if shift.employee is None:
             buttons[name] = shift.post.alias
         else:
-            text = f'{shift.post.alias} - {shift.employee.name} 🟨'
+            text = f'{shift.post.alias} - {shift.employee.name} {shift.employee.status}'
             buttons[name] = text
     return buttons
+
 
 def get_employees() -> dict[str: str]:
     buttons: dict[str: str] = {}
@@ -49,6 +54,7 @@ def get_employees() -> dict[str: str]:
         if not employee.is_busy:
             buttons[tg_id] = employee.name
     return buttons
+
 
 def set_shift(shift: dict[str: str], creator: str, offset: int = 1) -> None:
     post = shift['post']
@@ -67,6 +73,23 @@ def set_shift(shift: dict[str: str], creator: str, offset: int = 1) -> None:
         condition = f'post_id = "{post_id}"'
         db.update('day_post_employee', values, condition=condition)
     _set_local_shifts(post, employee)
+
+
+async def send_messages():
+    notified_shifts: dict[str: str] = _get_post_employee()
+    for employee, post in notified_shifts.items():
+        text: str = menu_buttons.NOTIFY_MESSAGE.format(post=shifts[post].post.alias.lower())
+        markup = get_service_keyboard(['ok'])
+        await bot.send_message(chat_id=employee, text=text, reply_markup=markup)
+
+
+def _get_post_employee() -> dict[str: str]:
+    result: dict[str: str] = {}
+    for shift in shifts.values():
+        if shift.employee is not None:
+            result[shift.employee.tg_id] = shift.post.name
+    return result
+
 
 def _set_local_shifts(post: str, employee: str) -> None:
     if shifts[post].employee is not None:

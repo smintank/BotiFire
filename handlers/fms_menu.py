@@ -8,7 +8,7 @@ from aiogram.types import CallbackQuery, Message
 
 from keyboards import menu_keyboards
 from keyboards.menu_keyboards import get_keyboard
-from model.methods import get_shift, get_employees, shifts, employees, set_shift
+from model.methods import get_shift, get_employees, shifts, employees, set_shift, send_messages
 from lexicon import menu_buttons
 
 router: Router = Router()
@@ -62,7 +62,7 @@ async def warning_not_name(message: Message):
 @router.callback_query(lambda c: c.data and c.data in employees,
                        StateFilter(FSMNotificationData.fill_name))
 async def process_callback_names(callback: CallbackQuery, state: FSMContext) -> None:
-    """Callback handler for employee choosing"""
+    """Callback handler for post choosing"""
     await state.update_data(employee=callback.data)
     set_shift(await state.get_data(), str(callback.from_user.id))
     await state.set_state(FSMNotificationData.fill_post)
@@ -70,6 +70,29 @@ async def process_callback_names(callback: CallbackQuery, state: FSMContext) -> 
     await callback.message.edit_text(text=menu_buttons.CHOSE_POST,
                                      reply_markup=inline_markup)
     logging.info('Current state: fill_post')
+
+
+@router.callback_query(lambda c: c.data and c.data == 'notify',
+                StateFilter(FSMNotificationData.fill_post))
+async def notify_callback_handler(callback: CallbackQuery, state: FSMContext):
+    """Callback handler for notify shifts"""
+    inline_markup = get_keyboard(get_shift(), last_btn=['back', 'ok'])
+    await callback.message.edit_text(text=menu_buttons.CONFIRM_NOTIFICATION,
+                                     reply_markup=inline_markup)
+    await state.set_state(FSMNotificationData.send_msgs)
+    logging.info('Current state: send_msgs')
+
+
+@router.callback_query(lambda c: c.data and c.data == 'ok',
+                StateFilter(FSMNotificationData.send_msgs))
+async def ok_callback_handler(callback: CallbackQuery, state: FSMContext):
+    """Callback handler for confirm to notify shifts"""
+    await send_messages()
+    inline_markup = get_keyboard(get_shift(), last_btn=['back', 'ok'])
+    await callback.message.edit_text(text=menu_buttons.CONFIRM_NOTIFICATION,
+                                     reply_markup=inline_markup)
+    await state.set_state(default_state)
+    logging.info('Current state: default_state')
 
 
 @router.message(StateFilter(FSMNotificationData.fill_name))
